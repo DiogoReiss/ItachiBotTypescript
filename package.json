@@ -1,0 +1,24 @@
+{
+  "name": "typescriptbot",
+  "version": "1.0.0",
+  "description": "its only for my studies ",
+  "main": "index.js",
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.9.7",
+    "yarn": "^1.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.26"
+  },
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "start": "ts-node --respawn --transpileOnly src/bot.ts",
+    "develop": "ts-node-dev  src/bot.ts"
+  },
+  "author": "Diogo Reis",
+  "license": "ISC"
+}
