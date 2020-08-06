@@ -1,12 +1,15 @@
 {
-  "name": "typescriptbot",
+  "name": "itachiflamenguista",
   "version": "1.0.0",
   "description": "its only for my studies ",
-  "main": "index.js",
+  "main": "bot.ts",
   "dependencies": {
     "@types/dotenv": "^8.2.0",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "knex": "^0.21.2",
+    "sqlite3": "^5.0.0",
+    "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.56",
     "typescript": "^3.9.7",
     "yarn": "^1.22.4"
@@ -17,8 +20,10 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "start": "ts-node --respawn --transpileOnly src/bot.ts",
-    "develop": "ts-node-dev  src/bot.ts"
+    "develop": "ts-node-dev  src/bot.ts",
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
   },
   "author": "Diogo Reis",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": "https://github.com/DiogoReiss/ItachiBotTypescript.git"
 }

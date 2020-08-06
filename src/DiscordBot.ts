@@ -62,7 +62,15 @@ export class DiscordBot {
           console.log(`O corno do ${msg.author.username} pediu uma foto de anão no server ${msg.guild?.name}`)
 
           return littleGuyMessage.sendLittleGuyImage(msg);
-        } else {
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}ademy`)) {
+          console.log('corsinha preto tunado');
+          msg.channel.send('uiuiuiui corsinha preto tunado ademir egrilo coisa mais linda')
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}karol`)) {
+          console.log('karol é gata!');
+          msg.channel.send('Karolzitcha é gata p krl <3')
+        } /*else {
           const wrongCommandEmbed = new Discord.MessageEmbed()
             .setTitle('Comando Errado parceiro!')
             .setColor(0xff0000)
@@ -72,7 +80,7 @@ export class DiscordBot {
           msg.channel.send(wrongCommandEmbed)
           console.log(`O ${msg.author.username} mandou um comando errado ${msg.guild?.name}`)
         }
-      }
+      */}
     })
   }
 }
