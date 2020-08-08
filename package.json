@@ -20,8 +20,8 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "start": "ts-node --respawn --transpileOnly src/bot.ts",
-    "develop": "ts-node-dev  src/bot.ts",
-    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
+    "develop": "ts-node src/bot.ts",
+    "knex:migrate": "knex --knexfile ./src/knexfile.ts migrate:latest"
   },
   "author": "Diogo Reis",
   "license": "ISC",

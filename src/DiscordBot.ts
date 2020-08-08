@@ -3,6 +3,11 @@ import './commands/littleGuy';
 import './commands/cuteGreeting';
 import Greeting from './commands/cuteGreeting';
 import LittleGuy from './commands/littleGuy';
+import Register from './commands/realLife/register'
+import db from '../src/database/connection';
+
+
+
 export class DiscordBot {
   private static instance: DiscordBot;
 
@@ -70,6 +75,13 @@ export class DiscordBot {
         if (msg.content.startsWith(`${process.env.PREFIX}karol`)) {
           console.log('karol é gata!');
           msg.channel.send('Karolzitcha é gata p krl <3')
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}registrar`)) {
+          let newUser = new Register(msg)
+          console.log(newUser.user.name);
+          console.log(newUser.user.avatar);
+
+          return newUser.sendNewUserMessage(msg)
         } /*else {
           const wrongCommandEmbed = new Discord.MessageEmbed()
             .setTitle('Comando Errado parceiro!')
