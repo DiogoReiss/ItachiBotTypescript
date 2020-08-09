@@ -13,6 +13,10 @@ export async function up(knex: Knex) {
     table.string('children').defaultTo('none');
     table.string('married').defaultTo("none");
     table.integer('terrain').defaultTo(0);
+    table.string('gun').notNullable().defaultTo('none');
+    table.integer('seed').notNullable().defaultTo(0);
+    table.integer('money_bank').notNullable().defaultTo(0);
+    table.integer('marijuana').notNullable().defaultTo(0);
   })
 }
 

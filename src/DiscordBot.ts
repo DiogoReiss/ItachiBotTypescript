@@ -4,7 +4,7 @@ import './commands/cuteGreeting';
 import Greeting from './commands/cuteGreeting';
 import LittleGuy from './commands/littleGuy';
 import Register from './commands/realLife/register'
-import db from '../src/database/connection';
+import commandList from './commands/help';
 
 
 
@@ -82,6 +82,10 @@ export class DiscordBot {
           console.log(newUser.user.avatar);
 
           return newUser.sendNewUserMessage(msg)
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}ajuda`)) {
+          const helpMsg = new commandList();
+          return helpMsg.sendHelpMessage(msg);
         } /*else {
           const wrongCommandEmbed = new Discord.MessageEmbed()
             .setTitle('Comando Errado parceiro!')

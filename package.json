@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "start": "ts-node --respawn --transpileOnly src/bot.ts",
-    "develop": "ts-node src/bot.ts",
+    "develop": "ts-node-dev --respawn --transpile-only src/bot.ts",
     "knex:migrate": "knex --knexfile ./src/knexfile.ts migrate:latest"
   },
   "author": "Diogo Reis",
