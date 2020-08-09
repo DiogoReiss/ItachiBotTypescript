@@ -24,11 +24,13 @@ export default class Register {
 
     const UserExists = new Discord.MessageEmbed()
       .setColor(0xff0000)
-      .setTitle(`Você já Existe, ${this.user.name}!`)
+      .setTitle(`Aconteceu um errinho aqui :(`)
+      .setDescription('Dei uma pesquisada aqui no meu banco de dados e você já está registrado!')
 
     const newUser = await db.select('name')
       .from('users')
       .where('name', this.user.name)
+      .andWhere('avatar', this.user.avatar)
       .then(userAlreadyExists => {
         if (userAlreadyExists.length === 0) {
           return db('users')
@@ -36,13 +38,14 @@ export default class Register {
               name: this.user.name,
               avatar: this.user.avatar
             }])
-            .then((newUserName) => {
-              console.log('inserted user', newUserName)
+            .then((newUserID) => {
+              console.log('inserted user', newUserID)
               msg.channel.send(newUserEmbed)
             });
 
         } else {
           console.log('já existe!')
+          console.log(userAlreadyExists)
 
           return msg.channel.send(UserExists)
         }
