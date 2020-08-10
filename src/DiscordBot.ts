@@ -5,6 +5,7 @@ import Greeting from './commands/cuteGreeting';
 import LittleGuy from './commands/littleGuy';
 import Register from './commands/realLife/register'
 import commandList from './commands/help';
+import Shop from './commands/realLife/shop';
 
 
 
@@ -86,7 +87,15 @@ export class DiscordBot {
         if (msg.content.startsWith(`${process.env.PREFIX}ajuda`)) {
           const helpMsg = new commandList();
           return helpMsg.sendHelpMessage(msg);
-        } /*else {
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}loja`)) {
+
+          const shop = new Shop(msg);
+
+          return shop.showShop(msg);
+        }
+
+        /*else {
           const wrongCommandEmbed = new Discord.MessageEmbed()
             .setTitle('Comando Errado parceiro!')
             .setColor(0xff0000)
