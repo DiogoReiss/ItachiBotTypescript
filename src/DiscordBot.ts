@@ -53,7 +53,7 @@ export class DiscordBot {
       if (msg.author.bot) return;
 
       if (msg.content === "ping") {
-        await msg.reply('Pong safado');
+        await msg.reply('Pong safado')
         console.log(msg.content)
       }
 
@@ -81,7 +81,6 @@ export class DiscordBot {
           let newUser = new Register(msg)
           console.log(newUser.user.name);
           console.log(newUser.user.avatar);
-
           return newUser.sendNewUserMessage(msg)
         }
         if (msg.content.startsWith(`${process.env.PREFIX}ajuda`)) {
