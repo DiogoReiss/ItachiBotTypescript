@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js';
 import db from '../../database/connection';
 interface newUser {
+  id: number;
   name: any;
   avatar: string
 }
@@ -11,6 +12,7 @@ export default class Register {
   user: newUser
   constructor(msg: any) {
     this.user = {
+      id: parseInt(msg.author.id),
       name: msg.author.username,
       avatar: msg.author.displayAvatarURL()
     }
@@ -19,7 +21,7 @@ export default class Register {
     const newUserEmbed = new Discord.MessageEmbed()
       .setColor(0xff0000)
       .setTitle(`Bem vindo, ${this.user.name}`)
-      .setDescription('Como eu sou bonzinho você já tem 5k para gastar na nossa loja!')
+      .setDescription('Como eu sou bonzinho você já tem 10k para gastar na nossa loja!')
       .setThumbnail(this.user.avatar)
 
     const UserExists = new Discord.MessageEmbed()
@@ -35,6 +37,7 @@ export default class Register {
         if (userAlreadyExists.length === 0) {
           return db('users')
             .insert([{
+              id: this.user.id,
               name: this.user.name,
               avatar: this.user.avatar
             }])

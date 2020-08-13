@@ -1,8 +1,8 @@
 import * as Discord from 'discord.js';
 import db from '../../database/connection';
-import { SCHED_NONE } from 'cluster';
 interface newUser {
-  name: any;
+  id: number
+  name: any
   avatar: string
 }
 
@@ -15,6 +15,7 @@ export default class Banco {
   user: newUser
   constructor(msg: any) {
     this.user = {
+      id: parseInt(msg.author.id),
       name: msg.author.username,
       avatar: msg.author.displayAvatarURL()
     }
@@ -72,20 +73,15 @@ export default class Banco {
   private async showBalance(msg: any) {
     const balance = await db.select('money')
       .from('users')
-      .where('name', this.user.name)
-      .andWhere('avatar', this.user.avatar)
+      .where('id', this.user.id)
       .then(balanceValue => {
         const money: number = balanceValue[0].money
-        console.log(money)
 
         const bankBalance = db.select('money_bank')
           .from('users')
-          .where('name', this.user.name)
-          .andWhere('avatar', this.user.avatar)
+          .where('id', this.user.id)
           .then((BankBalance) => {
             const bankMoney: number = BankBalance[0].money_bank;
-            console.log(bankMoney)
-            console.log(money + bankMoney)
 
             const bankEmbed = new Discord.MessageEmbed()
               .setColor(0xff0000)
@@ -108,11 +104,10 @@ export default class Banco {
   private async depositMoney(msg: any) {
     const balance = await db.select('money')
       .from('users')
-      .where('name', this.user.name)
-      .andWhere('avatar', this.user.avatar)
+      .where('id', this.user.id)
       .then((balanceValue) => {
         const amount = this.args[1]
-        const numberAmount = parseInt(amount)
+        var numberAmount = parseInt(amount)
         const BalanceValue: number = balanceValue[0].money
         if (amount > BalanceValue) {
           const errEmbed = new Discord.MessageEmbed()
@@ -126,38 +121,50 @@ export default class Banco {
         } else {
           const reference = db.select('money')
             .from('users')
-            .where('name', this.user.name)
-            .andWhere('avatar', this.user.avatar)
+            .where('id', this.user.id)
             .then(async (handAmount) => {
               const handMoney: number = handAmount[0].money
+              if (amount === 'all') {
+                numberAmount = handMoney
+              }
               const totalAmount = handMoney - numberAmount
-
               const deposit = await db.select('money_bank')
                 .from('users')
-                .where('name', this.user.name)
+                .where('id', this.user.id)
                 .then(async (amountToDeposit) => {
                   const moneyBank = amountToDeposit[0].money_bank
                   const newMoneyBank = (parseInt(moneyBank) + numberAmount)
                   const newAmount = await db.select('money_bank')
                     .from('users')
-                    .where('name', this.user.name)
+                    .where('id', this.user.id)
                     .update({ money_bank: newMoneyBank })
+                    .then(async () => {
+
+                      const newHandMoney = await db.select('money')
+                        .from('users')
+                        .where('id', this.user.id)
+                        .update({ money: totalAmount })
+                        .then(() => {
+                          const depositEmbed = new Discord.MessageEmbed()
+                            .setColor(0xff0000)
+                            .setTitle(':money_with_wings: Deposito realizado com sucesso!')
+                            .setDescription('Para ver o seu saldo digite "i.banco saldo"')
+                            .setThumbnail('https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista2.jpeg')
+                            .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
+
+                          msg.channel.send(depositEmbed)
+                        })
+                    })
+                    .catch((UnhandledPromiseRejectionWarning) => {
+                      const wrongAmountEmbed = new Discord.MessageEmbed()
+                        .setColor(0xff0000)
+                        .setTitle('Digite uma quantia correta!')
+                        .setDescription('Uma dicazinha, não utilize virgulas, pontos ou R$ por favor :) !')
+                        .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
+                      msg.channel.send(wrongAmountEmbed)
+                    })
                 })
 
-              const newHandMoney = await db.select('money')
-                .from('users')
-                .where('name', this.user.name)
-                .update({ money: totalAmount })
-                .then(() => {
-                  const depositEmbed = new Discord.MessageEmbed()
-                    .setColor(0xff0000)
-                    .setTitle(':money_with_wings: Deposito realizado com sucesso!')
-                    .setDescription('Para ver o seu saldo digite "i.banco saldo"')
-                    .setThumbnail('https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista2.jpeg')
-                    .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
-
-                  msg.channel.send(depositEmbed)
-                })
 
             })
         }
