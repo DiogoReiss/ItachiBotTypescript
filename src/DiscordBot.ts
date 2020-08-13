@@ -6,7 +6,7 @@ import LittleGuy from './commands/littleGuy';
 import Register from './commands/realLife/register'
 import commandList from './commands/help';
 import Shop from './commands/realLife/shop';
-
+import Banco from './commands/realLife/bank'
 
 
 export class DiscordBot {
@@ -93,6 +93,11 @@ export class DiscordBot {
           const shop = new Shop(msg);
 
           return shop.showShop(msg);
+        }
+        if (msg.content.startsWith(`${process.env.PREFIX}banco`)) {
+          const bank = new Banco(msg)
+
+          return bank.showBank(msg);
         }
 
         /*else {
