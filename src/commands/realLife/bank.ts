@@ -23,6 +23,8 @@ export default class Banco {
 
     this.args = msg.content.slice(`${process.env.PREFIX}`.length).trim().split(/ +/)
     this.command = this.args.shift().toLowerCase();
+
+
   }
 
   async showBank(msg: any) {
@@ -45,7 +47,7 @@ export default class Banco {
       }
 
       case 'sacar': {
-
+        this.drawOutMoney(msg)
         break;
       }
 
@@ -151,7 +153,6 @@ export default class Banco {
                             .setDescription('Para ver o seu saldo digite "i.banco saldo"')
                             .setThumbnail('https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista2.jpeg')
                             .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
-
                           msg.channel.send(depositEmbed)
                         })
                     })
@@ -172,6 +173,67 @@ export default class Banco {
   }
 
   private async drawOutMoney(msg: any) {
+
+
+    const bankBalance = await db.select('money_bank')
+      .from('users')
+      .where('id', this.user.id)
+      .then(async (BankBalance) => {
+        const AmountToDraw = this.args[1]
+        var amountNumber = parseInt(AmountToDraw)
+        const BankAmount = parseInt(BankBalance[0].money_bank)
+        if (AmountToDraw === 'all') {
+          amountNumber = BankAmount
+        }
+        if (amountNumber > BankAmount) {
+          const wrongAmount = new Discord.MessageEmbed()
+            .setColor(0xff0000)
+            .setTitle('Digite uma quantia correta!')
+            .setDescription('Você não tem esse dinheiro todo no banco, amigão!')
+            .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
+
+          msg.channel.send(wrongAmount)
+        }
+
+        const handBalance = await db.select('money')
+          .from('users')
+          .where('id', this.user.id)
+          .then(async (HandBalance) => {
+            const handBalance = HandBalance[0].money
+
+            const newBankAmount = BankAmount - amountNumber
+            const newHandAmount = handBalance + amountNumber
+
+            const NewBankAmount = await db.select('money_bank')
+              .from('users')
+              .where('id', this.user.id)
+              .update({ money_bank: newBankAmount })
+              .then(async () => {
+                const NewHandAmount = await db.select('money')
+                  .from('users')
+                  .where('id', this.user.id)
+                  .update({ money: newHandAmount })
+
+                const withdrawEmbed = new Discord.MessageEmbed()
+                  .setColor(0xff0000)
+                  .setTitle(':money_with_wings: Deposito realizado com sucesso!')
+                  .setDescription('Para ver o seu saldo digite "i.banco saldo"')
+                  .setThumbnail('https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista2.jpeg')
+                  .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
+                msg.channel.send(withdrawEmbed)
+
+              }).catch((UnhandledPromiseRejectionWarning) => {
+                const wrongAmountEmbed = new Discord.MessageEmbed()
+                  .setColor(0xff0000)
+                  .setTitle('Digite uma quantia correta!')
+                  .setDescription('Uma dicazinha, não utilize virgulas, pontos ou R$ por favor :) !')
+                  .setFooter('Itachi Flamenguista Bot', 'https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg')
+                msg.channel.send(wrongAmountEmbed)
+              })
+
+          })
+
+      })
 
   }
 
