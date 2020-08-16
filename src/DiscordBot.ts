@@ -52,7 +52,9 @@ export class DiscordBot {
       //Return nothing if the message's author is a Bot
       if (msg.author.bot) return;
 
-      if (msg.content === "ping") {
+
+
+      if (msg.content.startsWith(`${process.env.PREFIX}ping`)) {
         await msg.reply('Pong safado')
         console.log(msg.content)
       }
