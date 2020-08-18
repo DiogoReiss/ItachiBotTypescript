@@ -31,11 +31,11 @@ export default class Register {
 
     const newUser = await db.select('name')
       .from('users')
-      .where('name', this.user.name)
-      .andWhere('avatar', this.user.avatar)
-      .then(userAlreadyExists => {
+      .where('id', this.user.id)
+      .then(async userAlreadyExists => {
         if (userAlreadyExists.length === 0) {
-          return db('users')
+
+          const newUser = await db('users')
             .insert([{
               id: this.user.id,
               name: this.user.name,
@@ -44,7 +44,15 @@ export default class Register {
             .then((newUserID) => {
               console.log('inserted user', newUserID)
               msg.channel.send(newUserEmbed)
+
             });
+
+
+
+
+          return newUser
+
+
 
         } else {
           console.log('já existe!')
