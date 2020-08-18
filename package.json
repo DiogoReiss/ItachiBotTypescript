@@ -21,7 +21,8 @@
     "build": "tsc --build tsconfig.json",
     "start": "ts-node --respawn --transpileOnly src/bot.ts",
     "develop": "ts-node-dev --respawn --transpile-only src/bot.ts",
-    "knex:migrate": "knex --knexfile ./src/knexfile.ts migrate:latest"
+    "knex:migrate": "knex --knexfile ./src/knexfile.ts migrate:latest",
+    "knex:status": "knex --knexfile ./src/knexfile.ts migrate:status"
   },
   "author": "Diogo Reis",
   "license": "ISC",
