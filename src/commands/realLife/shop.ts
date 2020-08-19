@@ -71,7 +71,7 @@ export default class Shop {
         break;
       }
       case "maconha": {
-        //buyWeed(msg);
+        this.buyWeed(msg);
         console.log(
           `${msg.author.username} quer comprar um cigarrinho do diabo`
         );
@@ -716,5 +716,63 @@ export default class Shop {
       }
     }
     console.log(this.args[1]);
+  }
+
+  private async buyWeed(msg: any) {
+    const amount = parseInt(this.args[1]);
+    const moneyBalance = await db
+      .select("money")
+      .from("users")
+      .where("id", this.user.id)
+      .then(async (MoneyBalance) => {
+        const BalanceToMoney = parseInt(MoneyBalance[0].money);
+        const ToPay = amount * 100;
+        const newBalanceMoney = BalanceToMoney - ToPay;
+        if (BalanceToMoney < ToPay) {
+          const noMoney = new Discord.MessageEmbed()
+            .setColor(0xff0000)
+            .setTitle("Lojinha zé Itachi")
+            .setDescription(
+              "Você não tem dinheiro suficiente para comprar essa quantia de sementes!"
+            )
+            .setFooter(
+              "Itachi Flamenguista Bot",
+              "https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg"
+            );
+        } else {
+          const inventory = await db
+            .select("seed")
+            .from("user_inventory")
+            .where("user_id", this.user.id)
+            .then(async (seedQuantity) => {
+              const newQuantity = amount + parseInt(seedQuantity[0].seed);
+              const newInventory = await db
+                .select("seed")
+                .from("user_inventory")
+                .where("user_id", this.user.id)
+                .update({ seed: newQuantity })
+                .then(async () => {
+                  const newBalance = await db
+                    .select("money")
+                    .from("users")
+                    .where("id", this.user.id)
+                    .update({ money: newBalanceMoney })
+                    .then(() => {
+                      const transition = new Discord.MessageEmbed()
+                        .setColor(0xff0000)
+                        .setTitle("Lojinha zé Itachi")
+                        .setDescription(
+                          `Obrigado por comprar ${newQuantity} sementes! Volte sempre :)`
+                        )
+                        .setFooter(
+                          "Itachi Flamenguista Bot",
+                          "https://raw.githubusercontent.com/DiogoReiss/ItachiBotTypescript/master/public/itachiflamenguista.jpg"
+                        );
+                      msg.channel.send(transition);
+                    });
+                });
+            });
+        }
+      });
   }
 }
