@@ -762,7 +762,7 @@ export default class Shop {
                         .setColor(0xff0000)
                         .setTitle("Lojinha zé Itachi")
                         .setDescription(
-                          `Obrigado por comprar ${newQuantity} sementes! Volte sempre :)`
+                          `Obrigado por comprar ${amount} sementes! Volte sempre :)`
                         )
                         .setFooter(
                           "Itachi Flamenguista Bot",
