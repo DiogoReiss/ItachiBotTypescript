@@ -7,6 +7,7 @@ import Register from './commands/realLife/register'
 import commandList from './commands/help';
 import Shop from './commands/realLife/shop';
 import Banco from './commands/realLife/bank'
+import Nivel from './commands/realLife/nivel';
 
 
 export class DiscordBot {
@@ -87,6 +88,8 @@ export class DiscordBot {
         }
         if (msg.content.startsWith(`${process.env.PREFIX}ajuda`)) {
           const helpMsg = new commandList();
+          let xp = new Nivel(msg)
+          xp.getUser()
           return helpMsg.sendHelpMessage(msg);
         }
         if (msg.content.startsWith(`${process.env.PREFIX}loja`)) {

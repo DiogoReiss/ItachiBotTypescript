@@ -46,18 +46,10 @@ export default class Register {
               msg.channel.send(newUserEmbed)
 
             });
-
-
-
-
           return newUser
-
-
-
         } else {
           console.log('já existe!')
           console.log(userAlreadyExists)
-
           return msg.channel.send(UserExists)
         }
       })
