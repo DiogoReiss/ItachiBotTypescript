@@ -4,24 +4,20 @@
   "description": "its only for my studies ",
   "main": "bot.ts",
   "dependencies": {
-    "@types/dotenv": "^8.2.0",
     "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0",
-    "knex": "^0.21.2",
-    "sqlite3": "^5.0.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^14.0.26",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.56",
     "typescript": "^3.9.7"
   },
-  "devDependencies": {
-    "@types/node": "^14.0.26"
-  },
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "start": "ts-node --respawn --transpileOnly src/bot.ts",
-    "develop": "ts-node-dev --respawn --transpile-only src/bot.ts",
-    "knex:migrate": "knex --knexfile ./src/knexfile.ts migrate:latest",
-    "knex:status": "knex --knexfile ./src/knexfile.ts migrate:status"
+    "start": "ts-node --respawn --transpileOnly src/index.ts",
+    "develop": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "author": "Diogo Reis",
   "license": "ISC",
